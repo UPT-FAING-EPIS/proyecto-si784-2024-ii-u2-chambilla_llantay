@@ -28,7 +28,7 @@ if(isset($_POST['submit'])){
         $_SESSION['user_type'] = $result['user_type'];
         
         if($result['user_type'] == 'admin'){
-            header('location:../admin/dashboard.php');
+            header('location:../admin/admin_page.php');
         }else{
             header('location:../usuario/home.php');
         }

@@ -12,13 +12,13 @@ $db = new Database();
 $conn = $db->connect();
 $userController = new UserController($conn);
 
-if(isset($_POST['submit'])){
+if (isset($_POST['submit'])) {
    $name = $_POST['name'];
    $email = $_POST['email'];
    $password = $_POST['password'];
    $cpassword = $_POST['cpassword'];
 
-   if($password == $cpassword){
+   if ($password == $cpassword) {
       $userData = [
          'name' => $name,
          'email' => $email,
@@ -26,14 +26,14 @@ if(isset($_POST['submit'])){
       ];
 
       $result = $userController->register($userData);
-      
-      if($result['success']){
-         header('Location: /login');
+
+      if ($result['success']) {
+         header('Location: login.php');
          exit();
-      }else{
+      } else {
          $message[] = $result['message'];
       }
-   }else{
+   } else {
       $message[] = 'Las contraseñas no coinciden!';
    }
 }
@@ -41,20 +41,26 @@ if(isset($_POST['submit'])){
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <title>Registro</title>
-   <!-- ... tus estilos ... -->
+   <link rel="icon" id="png" href="../../images/icon2.png">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+   <link rel="stylesheet" href="../../css/style.css">
 </head>
+
 <body>
-   <?php if(isset($message)): ?>
-      <?php foreach($message as $msg): ?>
+   <?php if (isset($message)): ?>
+      <?php foreach ($message as $msg): ?>
          <div class="message">
             <span><?= $msg ?></span>
             <i class="fas fa-times" onclick="this.parentElement.remove();"></i>
          </div>
       <?php endforeach; ?>
    <?php endif; ?>
-   
+
    <div class="form-container">
       <form action="" method="post">
          <h3>Regístrate ahora</h3>
@@ -67,4 +73,5 @@ if(isset($_POST['submit'])){
       </form>
    </div>
 </body>
-</html> 
+
+</html>
