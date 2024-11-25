@@ -83,7 +83,7 @@ CREATE TABLE `orders` (
 --
 
 INSERT INTO `orders` (`id`, `user_id`, `name`, `number`, `email`, `method`, `address`, `total_products`, `total_price`, `placed_on`, `payment_status`) VALUES
-(10, 1, 'test', '123456', 'test@hotmail.com', 'cash on delivery', 'flat no. 123, afsfdsfs, fafdsa, fdafda - 1233', ', Test (3) ', 75, '30-Aug-2024', 'completed');
+(10, 1, 'test', '123456', 'test@hotmail.com', 'cash on delivery', 'flat no. 123, afsfdsfs, fafdsa, fdafda - 1233', ', Test (3) ', 75, '30-Aug-2024', 'completado');
 
 -- --------------------------------------------------------
 
