@@ -1,6 +1,11 @@
 <?php
 namespace Controllers;
 
+require_once __DIR__ . '/../Models/Message.php';
+require_once __DIR__ . '/../Models/User.php';
+use Models\Message;
+use Models\User;
+
 class ContactController {
     private $conn;
 
@@ -10,30 +15,40 @@ class ContactController {
 
     public function sendMessage($userData) {
         try {
-            $name = $userData['name'];
-            $email = $userData['email'];
-            $number = $userData['number'];
-            $msg = $userData['message'];
-            $user_id = $userData['user_id'];
+            // Validar que todos los campos requeridos existan
+            if (!isset($userData['user_id']) || !isset($userData['name']) || 
+                !isset($userData['email']) || !isset($userData['message'])) {
+                return ['success' => false, 'message' => 'Faltan campos requeridos'];
+            }
 
-            // Verificar si el mensaje ya existe
-            $stmt = $this->conn->prepare("SELECT * FROM message WHERE name = ? AND email = ? AND number = ? AND message = ?");
-            $stmt->execute([$name, $email, $number, $msg]);
+            // Usar el modelo User para validar
+            $user = new User();
+            $user->setId($userData['user_id']);
+            if (!$user->exists($this->conn)) {  // Asumiendo que existe un método exists() en User
+                return ['success' => false, 'message' => 'Usuario no encontrado'];
+            }
 
-            if($stmt->rowCount() > 0) {
+            $message = new Message();
+            $message->setUserId($userData['user_id']);
+            $message->setName($userData['name']);
+            $message->setEmail($userData['email']);
+            $message->setNumber($userData['number']);
+            $message->setMessage($userData['message']);
+
+            if ($message->exists($this->conn)) {  // Asumiendo que existe un método exists() en Message
                 return ['success' => false, 'message' => '¡Mensaje ya enviado!'];
             }
 
-            // Insertar nuevo mensaje
-            $stmt = $this->conn->prepare("INSERT INTO message (user_id, name, email, number, message) VALUES (?, ?, ?, ?, ?)");
-            
-            if($stmt->execute([$user_id, $name, $email, $number, $msg])) {
+            if ($message->save($this->conn)) {
                 return ['success' => true, 'message' => '¡Mensaje enviado exitosamente!'];
             }
 
+            // Añadir log específico si save() falla
+            error_log("Error en save(): Falló al guardar el mensaje para usuario ID: " . $userData['user_id']);
+            return ['success' => false, 'message' => 'Error al enviar mensaje'];
         } catch (\Exception $e) {
             error_log("Error al enviar mensaje: " . $e->getMessage());
-            return ['success' => false, 'message' => 'Error al enviar el mensaje'];
+            return ['success' => false, 'message' => 'Error al enviar mensaje: ' . $e->getMessage()];
         }
     }
 }

@@ -57,13 +57,13 @@ $products = $productController->getLatestProducts();
       <?php if(!empty($products)): ?>
          <?php foreach($products as $product): ?>
          <form action="" method="post" class="box">
-            <img class="image" src="../../uploaded_img/<?php echo htmlspecialchars($product['image']); ?>" alt="">
-            <div class="name"><?php echo htmlspecialchars($product['name']); ?></div>
-            <div class="price">S/. <?php echo htmlspecialchars($product['price']); ?> Soles</div>
+            <img class="image" src="../../uploaded_img/<?php echo htmlspecialchars($product->getImage()); ?>" alt="">
+            <div class="name"><?php echo htmlspecialchars($product->getName()); ?></div>
+            <div class="price">S/. <?php echo htmlspecialchars($product->getPrice()); ?> Soles</div>
             <input type="number" min="1" name="product_quantity" value="1" class="qty">
-            <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product['name']); ?>">
-            <input type="hidden" name="product_price" value="<?php echo htmlspecialchars($product['price']); ?>">
-            <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($product['image']); ?>">
+            <input type="hidden" name="product_name" value="<?php echo htmlspecialchars($product->getName()); ?>">
+            <input type="hidden" name="product_price" value="<?php echo htmlspecialchars($product->getPrice()); ?>">
+            <input type="hidden" name="product_image" value="<?php echo htmlspecialchars($product->getImage()); ?>">
             <input type="submit" value="agregar al carrito" name="add_to_cart" class="btn">
          </form>
          <?php endforeach; ?>

@@ -52,12 +52,12 @@ if(isset($_GET['delete'])){
          foreach($messages as $message){
    ?>
    <div class="box">
-      <p> user id : <span><?php echo $message['user_id']; ?></span> </p>
-      <p> nombre : <span><?php echo $message['name']; ?></span> </p>
-      <p> numero : <span><?php echo $message['number']; ?></span> </p>
-      <p> email : <span><?php echo $message['email']; ?></span> </p>
-      <p> mensaje : <span><?php echo $message['message']; ?></span> </p>
-      <a href="admin_contacts.php?delete=<?php echo $message['id']; ?>" 
+      <p> user id : <span><?php echo $message->getUserId(); ?></span> </p>
+      <p> nombre : <span><?php echo $message->getName(); ?></span> </p>
+      <p> numero : <span><?php echo $message->getNumber(); ?></span> </p>
+      <p> email : <span><?php echo $message->getEmail(); ?></span> </p>
+      <p> mensaje : <span><?php echo $message->getMessage(); ?></span> </p>
+      <a href="admin_contacts.php?delete=<?php echo $message->getId(); ?>" 
          onclick="return confirm('¿Borrar este mensaje?');" 
          class="delete-btn">eliminar mensaje</a>
    </div>

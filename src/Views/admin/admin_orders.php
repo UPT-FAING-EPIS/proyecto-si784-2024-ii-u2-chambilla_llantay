@@ -61,24 +61,24 @@ if(isset($_GET['delete'])){
          foreach($orders as $order){
       ?>
       <div class="box">
-         <p> user id : <span><?php echo $order['user_id']; ?></span> </p>
-         <p> estimado : <span><?php echo $order['placed_on']; ?></span> </p>
-         <p> nombre : <span><?php echo $order['name']; ?></span> </p>
-         <p> numero : <span><?php echo $order['number']; ?></span> </p>
-         <p> email : <span><?php echo $order['email']; ?></span> </p>
-         <p> direccion : <span><?php echo $order['address']; ?></span> </p>
-         <p> productos totales : <span><?php echo $order['total_products']; ?></span> </p>
-         <p> Precio total : <span>S/. <?php echo $order['total_price']; ?> soles</span> </p>
-         <p> Método de pago : <span><?php echo $order['method']; ?></span> </p>
+         <p> user id : <span><?php echo $order->getUserId(); ?></span> </p>
+         <p> estimado : <span><?php echo $order->getPlacedOn(); ?></span> </p>
+         <p> nombre : <span><?php echo $order->getName(); ?></span> </p>
+         <p> numero : <span><?php echo $order->getNumber(); ?></span> </p>
+         <p> email : <span><?php echo $order->getEmail(); ?></span> </p>
+         <p> direccion : <span><?php echo $order->getAddress(); ?></span> </p>
+         <p> productos totales : <span><?php echo $order->getTotalProducts(); ?></span> </p>
+         <p> Precio total : <span>S/. <?php echo $order->getTotalPrice(); ?> soles</span> </p>
+         <p> Método de pago : <span><?php echo $order->getMethod(); ?></span> </p>
          <form action="" method="post">
-            <input type="hidden" name="order_id" value="<?php echo $order['id']; ?>">
+            <input type="hidden" name="order_id" value="<?php echo $order->getId(); ?>">
             <select name="update_payment">
-               <option value="" selected disabled><?php echo $order['payment_status']; ?></option>
-               <option value="pending">pending</option>
-               <option value="completed">completed</option>
+               <option value="" selected disabled><?php echo $order->getPaymentStatus(); ?></option>
+               <option value="pendiente">pendiente</option>
+               <option value="completado">completado</option>
             </select>
             <input type="submit" value="actualizar" name="update_order" class="option-btn">
-            <a href="admin_orders.php?delete=<?php echo $order['id']; ?>" 
+            <a href="admin_orders.php?delete=<?php echo $order->getId(); ?>" 
                onclick="return confirm('¿Eliminar este pedido?');" 
                class="delete-btn">eliminar</a>
          </form>

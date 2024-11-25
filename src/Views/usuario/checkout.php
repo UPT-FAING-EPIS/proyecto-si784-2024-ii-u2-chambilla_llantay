@@ -94,10 +94,10 @@ $grand_total = 0;
          <div class="inputBox">
             <span>Método de pago:</span>
             <select name="method">
-               <option value="cash on delivery">Pago en persona</option>
-               <option value="credit card">Tarjeta de crédito</option>
-               <option value="paypal">PayPal</option>
-               <option value="debito">Débito</option>
+               <option value="Pago en persona">Pago en persona</option>
+               <option value="Tarjeta de crédito">Tarjeta de crédito</option>
+               <option value="PayPal">PayPal</option>
+               <option value="Débito">Débito</option>
             </select>
          </div>
          <div class="inputBox">

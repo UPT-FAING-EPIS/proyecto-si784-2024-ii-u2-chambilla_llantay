@@ -1,6 +1,10 @@
 <?php
-require_once __DIR__ . '/../../config.php';
+require_once __DIR__ . '/../../Config/Database.php';
 require_once __DIR__ . '/../../Controllers/AdminController.php';
+require_once __DIR__ . '/../../Models/User.php';
+
+use Config\Database;
+use Controllers\AdminController;
 
 session_start();
 
@@ -9,7 +13,9 @@ if(!isset($_SESSION['user_id']) || $_SESSION['user_type'] !== 'admin'){
    exit();
 }
 
-$adminController = new Controllers\AdminController($conn);
+$db = new Database();
+$conn = $db->connect();
+$adminController = new AdminController($conn);
 
 if(isset($_GET['delete'])){
    $delete_id = $_GET['delete'];
@@ -43,12 +49,12 @@ if(isset($_GET['delete'])){
          foreach($users as $user){
       ?>
       <div class="box">
-         <p> user id : <span><?php echo $user['id']; ?></span> </p>
-         <p> nombre de usuario : <span><?php echo $user['name']; ?></span> </p>
-         <p> email : <span><?php echo $user['email']; ?></span> </p>
-         <p> tipo de usuario : <span style="color:<?php if($user['user_type'] == 'admin'){ echo 'var(--orange)'; } ?>">
-            <?php echo $user['user_type']; ?></span> </p>
-         <a href="admin_users.php?delete=<?php echo $user['id']; ?>" 
+         <p> user id : <span><?php echo $user->getId(); ?></span> </p>
+         <p> nombre de usuario : <span><?php echo $user->getName(); ?></span> </p>
+         <p> email : <span><?php echo $user->getEmail(); ?></span> </p>
+         <p> tipo de usuario : <span style="color:<?php if($user->getUserType() == 'admin'){ echo 'var(--orange)'; } ?>">
+            <?php echo $user->getUserType(); ?></span> </p>
+         <a href="admin_users.php?delete=<?php echo $user->getId(); ?>" 
             onclick="return confirm('¿Eliminar este usuario?');" 
             class="delete-btn">eliminar usuario</a>
       </div>

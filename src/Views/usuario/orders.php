@@ -52,17 +52,17 @@ $orders = $orderController->getUserOrders($user_id);
          foreach($orders as $order){
       ?>
       <div class="box">
-         <p> Fecha : <span><?php echo $order['placed_on']; ?></span> </p>
-         <p> Nombre : <span><?php echo $order['name']; ?></span> </p>
-         <p> Número : <span><?php echo $order['number']; ?></span> </p>
-         <p> Email : <span><?php echo $order['email']; ?></span> </p>
-         <p> Dirección : <span><?php echo $order['address']; ?></span> </p>
-         <p> Método de pago : <span><?php echo $order['method']; ?></span> </p>
-         <p> Tus pedidos : <span><?php echo $order['total_products']; ?></span> </p>
-         <p> Precio total : <span>S/. <?php echo $order['total_price']; ?> Soles</span> </p>
+         <p> Fecha : <span><?php echo $order->getPlacedOn(); ?></span> </p>
+         <p> Nombre : <span><?php echo $order->getName(); ?></span> </p>
+         <p> Número : <span><?php echo $order->getNumber(); ?></span> </p>
+         <p> Email : <span><?php echo $order->getEmail(); ?></span> </p>
+         <p> Dirección : <span><?php echo $order->getAddress(); ?></span> </p>
+         <p> Método de pago : <span><?php echo $order->getMethod(); ?></span> </p>
+         <p> Tus pedidos : <span><?php echo $order->getTotalProducts(); ?></span> </p>
+         <p> Precio total : <span>S/. <?php echo $order->getTotalPrice(); ?> Soles</span> </p>
          <p> Estado del pago : 
-            <span style="color:<?php echo ($order['payment_status'] == 'pending') ? 'red' : 'green'; ?>;">
-               <?php echo $order['payment_status']; ?>
+            <span style="color:<?php echo ($order->getPaymentStatus() == 'pendiente') ? 'red' : 'green'; ?>;">
+               <?php echo $order->getPaymentStatus(); ?>
             </span>
          </p>
       </div>

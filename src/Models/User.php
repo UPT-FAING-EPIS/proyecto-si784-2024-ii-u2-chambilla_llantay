@@ -25,4 +25,14 @@ class User {
         $this->password = password_hash($password, PASSWORD_DEFAULT);
     }
     public function setUserType($userType) { $this->userType = $userType; }
+    public function setId($id) { 
+        $this->id = $id; 
+        return $this;
+    }
+
+    public function exists($conn) {
+        $stmt = $conn->prepare("SELECT id FROM users WHERE id = ?");
+        $stmt->execute([$this->id]);
+        return $stmt->rowCount() > 0;
+    }
 }

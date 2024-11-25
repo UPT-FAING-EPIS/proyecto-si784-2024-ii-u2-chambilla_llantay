@@ -96,14 +96,14 @@ $products = $adminController->getAllProducts();
 
       <?php
          if(count($products) > 0){
-            foreach($products as $fetch_products){
+            foreach($products as $product){
       ?>
-      <div class="box"> <!--salen img d las pelis -->
-         <img src="../../uploaded_img/<?php echo $fetch_products['image']; ?>" alt="">
-         <div class="name"><?php echo $fetch_products['name']; ?></div>
-         <div class="price">S/. <?php echo $fetch_products['price']; ?> Soles</div>
-         <a href="admin_products.php?update=<?php echo $fetch_products['id']; ?>" class="option-btn">actualizar</a>
-         <a href="admin_products.php?delete=<?php echo $fetch_products['id']; ?>" class="delete-btn" onclick="return confirm('¿eliminar este producto?');">eliminar</a>
+      <div class="box">
+         <img src="../../uploaded_img/<?php echo $product->getImage(); ?>" alt="">
+         <div class="name"><?php echo $product->getName(); ?></div>
+         <div class="price">S/. <?php echo $product->getPrice(); ?> Soles</div>
+         <a href="admin_products.php?update=<?php echo $product->getId(); ?>" class="option-btn">actualizar</a>
+         <a href="admin_products.php?delete=<?php echo $product->getId(); ?>" class="delete-btn" onclick="return confirm('¿eliminar este producto?');">eliminar</a>
       </div>
       <?php
          }
@@ -133,7 +133,7 @@ $products = $adminController->getAllProducts();
       <input type="number" name="update_price" value="<?php echo $fetch_update['price']; ?>" min="0" class="box" required placeholder="enter product price">
       <input type="file" class="box" name="update_image" accept="image/jpg, image/jpeg, image/png">
       <input type="submit" value="actualizar" name="update_product" class="btn">
-      <input type="reset" value="cancel" id="close-update" class="option-btn">
+      <button type="button" id="close-update" class="option-btn">cancelar</button>
    </form>
    <?php
          }
@@ -152,7 +152,7 @@ $products = $adminController->getAllProducts();
 
 
 <!-- custom admin js file link  -->
-<script src="../js/admin_script.js"></script>
+<script src="../../js/admin_script.js"></script>
 
 </body>
 </html>

@@ -17,4 +17,8 @@ class Product {
     public function setName($name) { $this->name = $name; }
     public function setPrice($price) { $this->price = $price; }
     public function setImage($image) { $this->image = $image; }
+
+    public function setId($id) {
+        $this->id = $id;
+    }
 }

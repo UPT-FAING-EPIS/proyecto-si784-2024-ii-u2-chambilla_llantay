@@ -1,3 +1,6 @@
+<?php
+namespace Models;
+
 class Order {
     private $id;
     private $userId;
@@ -34,4 +37,10 @@ class Order {
     public function setTotalProducts($totalProducts) { $this->totalProducts = $totalProducts; }
     public function setTotalPrice($totalPrice) { $this->totalPrice = $totalPrice; }
     public function setPaymentStatus($status) { $this->paymentStatus = $status; }
+    public function setPlacedOn($placedOn) { $this->placedOn = $placedOn; }
+
+    public function setId($id) {
+        $this->id = $id;
+        return $this;
+    }
 } 

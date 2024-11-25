@@ -1,6 +1,8 @@
 <?php
 namespace Controllers;
 
+use Models\User;
+
 class UserController {
     private $conn;
 
@@ -18,15 +20,23 @@ class UserController {
                 return ['success' => false, 'message' => 'Este email ya está registrado'];
             }
 
-            // Hash de la contraseña
-            $hashedPassword = md5($userData['password']); // Nota: MD5 se usa por compatibilidad con BD existente
+            // Crear instancia del modelo User
+            $user = new User();
+            $user->setName($userData['name']);
+            $user->setEmail($userData['email']);
+            $user->setPassword($userData['password']);
 
-            // Insertar nuevo usuario
-            $stmt = $this->conn->prepare("INSERT INTO users (name, email, password, user_type) VALUES (?, ?, ?, 'user')");
+            // Insertar nuevo usuario usando los datos del modelo
+            $stmt = $this->conn->prepare(
+                "INSERT INTO users (name, email, password, user_type) 
+                 VALUES (?, ?, ?, ?)"
+            );
+            
             $stmt->execute([
-                $userData['name'],
-                $userData['email'],
-                $hashedPassword
+                $user->getName(),
+                $user->getEmail(),
+                md5($userData['password']), // Mantenemos MD5 por compatibilidad
+                $user->getUserType()
             ]);
 
             return ['success' => true, 'message' => 'Registro exitoso'];
@@ -39,22 +49,27 @@ class UserController {
     public function login($email, $password) {
         try {
             $stmt = $this->conn->prepare("SELECT * FROM users WHERE email = ? AND password = ?");
-            $hashedPassword = md5($password); // Nota: MD5 se usa por compatibilidad con BD existente
+            $hashedPassword = md5($password);
             $stmt->execute([$email, $hashedPassword]);
-            $user = $stmt->fetch(\PDO::FETCH_ASSOC);
+            $userData = $stmt->fetch(\PDO::FETCH_ASSOC);
 
-            if ($user) {
-                $_SESSION['user_id'] = $user['id'];
-                $_SESSION['user_name'] = $user['name'];
-                $_SESSION['user_email'] = $user['email'];
-                $_SESSION['user_type'] = $user['user_type'];
+            if ($userData) {
+                $user = new User();
+                $user->setName($userData['name']);
+                $user->setEmail($userData['email']);
+                $user->setUserType($userData['user_type']);
+
+                $_SESSION['user_id'] = $userData['id'];
+                $_SESSION['user_name'] = $user->getName();
+                $_SESSION['user_email'] = $user->getEmail();
+                $_SESSION['user_type'] = $user->getUserType();
 
                 return [
                     'success' => true,
-                    'user_id' => $user['id'],
-                    'user_name' => $user['name'],
-                    'user_email' => $user['email'],
-                    'user_type' => $user['user_type']
+                    'user_id' => $userData['id'],
+                    'user_name' => $user->getName(),
+                    'user_email' => $user->getEmail(),
+                    'user_type' => $user->getUserType()
                 ];
             }
 

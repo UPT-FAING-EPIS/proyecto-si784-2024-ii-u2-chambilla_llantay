@@ -1,3 +1,6 @@
+<?php
+namespace Models;
+
 class Cart {
     private $id;
     private $userId;
