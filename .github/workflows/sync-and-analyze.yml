@@ -66,3 +66,17 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Install Snyk CLI
+        run: |
+          curl https://static.snyk.io/cli/latest/snyk-linux -o snyk
+          chmod +x snyk
+          sudo mv snyk /usr/local/bin/
+
+      - name: Run Snyk Security Scan
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        run: |
+          snyk auth ${{ secrets.SNYK_TOKEN }}
+          snyk test --all-projects --org=5e3c7aa1-e350-44f6-954f-fe9358880baa
+          snyk monitor --all-projects --org=5e3c7aa1-e350-44f6-954f-fe9358880baa
