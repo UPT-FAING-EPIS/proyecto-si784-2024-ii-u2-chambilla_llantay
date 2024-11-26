@@ -55,7 +55,9 @@ jobs:
         uses: semgrep/semgrep-action@v1
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
-          SEMGREP_ORG_ID: "34976"
+          SEMGREP_DEPLOYMENT_ID: "pyfange"
+          SEMGREP_REPO_NAME: ${{ github.repository }}
+          SEMGREP_BRANCH: ${{ github.ref_name }}
         with:
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
 
