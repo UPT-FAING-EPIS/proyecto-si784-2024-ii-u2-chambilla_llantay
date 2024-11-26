@@ -17,21 +17,42 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PERSONAL_TOKEN }}
 
-      # Paso 2: Configurar PHP y dependencias
+      # Paso 2: Configurar PHP y Xdebug
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: '8.2'
+          extensions: xdebug
           coverage: xdebug
 
+      # Paso 3: Validar e instalar dependencias
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
       - name: Install dependencies
-        run: composer install
+        run: composer install --prefer-dist --no-progress
 
-      # Paso 3: Ejecutar tests con cobertura
-      - name: Run tests with coverage
-        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+      # Paso 4: Ejecutar pruebas y generar cobertura
+      - name: Run test suite
+        run: vendor/bin/phpunit --coverage-clover coverage.xml
 
-      # Paso 4: Sincronizar con el otro repositorio
+      # Paso 5: Verificar cobertura
+      - name: Check test coverage
+        run: |
+          COVERAGE=$(php -r "
+            \$xml = new SimpleXMLElement(file_get_contents('coverage.xml'));
+            \$metrics = \$xml->xpath('//metrics');
+            \$covered = (int)\$metrics[0]['coveredstatements'];
+            \$total = (int)\$metrics[0]['statements'];
+            echo round((\$covered / \$total) * 100, 2);
+          ")
+          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
+            echo "Test coverage is below 80% ($COVERAGE%)"
+            exit 1
+          fi
+          echo "Test coverage is $COVERAGE%"
+
+      # Paso 6: Sincronizar con el otro repositorio
       - name: Sync repositories
         run: |
           git config --global user.name 'JosueUPT'
@@ -44,7 +65,7 @@ jobs:
           git push origin main || echo "No changes to push"
           cd ..
 
-      # Paso 5: Análisis de SonarCloud
+      # Paso 7: Análisis de SonarCloud
       - name: SonarQube Cloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
