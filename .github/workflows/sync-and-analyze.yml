@@ -50,14 +50,10 @@ jobs:
       - name: Run Semgrep Security Scan
         uses: semgrep/semgrep-action@v1
         with:
-          working-directory: ../CalidadU2
-          config: >-
-            p/security-audit
-            p/owasp-top-ten
-            p/php
-          generateSarif: true
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
         env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_REPO_URL: https://github.com/JosueUPT/CalidadU2
+          SEMGREP_REPO_NAME: CalidadU2
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
