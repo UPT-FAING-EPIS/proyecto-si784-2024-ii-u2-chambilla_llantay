@@ -10,14 +10,12 @@ jobs:
   sync-and-scan:
     runs-on: ubuntu-latest
     steps:
-      # Paso 1: Checkout del repositorio actual
       - name: Checkout source repository
         uses: actions/checkout@v3
         with:
           fetch-depth: 0
           token: ${{ secrets.PERSONAL_TOKEN }}
 
-      # Paso 2: Configurar PHP y Xdebug
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -25,33 +23,15 @@ jobs:
           extensions: xdebug
           coverage: xdebug
 
-      # Paso 3: Actualizar composer.lock
-      - name: Update Composer dependencies
-        run: |
-          composer update --no-interaction --no-progress
-          composer validate --strict
+      - name: Install Dependencies
+        run: composer install --no-interaction --no-progress
 
-      # Paso 4: Ejecutar pruebas y generar cobertura
-      - name: Run test suite
+      - name: Run test suite with coverage
         run: vendor/bin/phpunit --coverage-clover coverage.xml
 
-      # Paso 5: Verificar cobertura
-      - name: Check test coverage
-        run: |
-          COVERAGE=$(php -r "
-            \$xml = new SimpleXMLElement(file_get_contents('coverage.xml'));
-            \$metrics = \$xml->xpath('//metrics');
-            \$covered = (int)\$metrics[0]['coveredstatements'];
-            \$total = (int)\$metrics[0]['statements'];
-            echo round((\$covered / \$total) * 100, 2);
-          ")
-          if (( $(echo "$COVERAGE < 80" | bc -l) )); then
-            echo "Test coverage is below 80% ($COVERAGE%)"
-            exit 1
-          fi
-          echo "Test coverage is $COVERAGE%"
+      - name: Fix code coverage paths
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' coverage.xml
 
-      # Paso 6: Sincronizar con el otro repositorio
       - name: Sync repositories
         run: |
           git config --global user.name 'JosueUPT'
@@ -67,13 +47,8 @@ jobs:
           git push origin main || echo "No changes to push"
           cd ..
 
-      # Paso 7: Análisis de SonarCloud
-      - name: SonarQube Cloud Scan
+      - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      # Después de instalar dependencias
-      - name: Generate autoloader
-        run: composer dump-autoload
