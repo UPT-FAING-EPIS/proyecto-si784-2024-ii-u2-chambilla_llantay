@@ -55,16 +55,19 @@ jobs:
         uses: semgrep/semgrep-action@v1
         with:
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
-          config: p/security-audit
 
       - name: Generate SARIF file
-        run: semgrep scan --sarif --output=semgrep.sarif
+        uses: semgrep/semgrep-action@v1
+        with:
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+          config: p/security-audit
+          output: semgrep.sarif
+          sarif: true
 
       - name: Upload SARIF file
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: semgrep.sarif
-          wait-for-processing: true
         if: always()
 
       - name: SonarCloud Scan
