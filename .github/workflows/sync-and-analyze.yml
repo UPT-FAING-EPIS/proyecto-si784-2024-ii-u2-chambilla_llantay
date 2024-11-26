@@ -17,7 +17,21 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PERSONAL_TOKEN }}
 
-      # Paso 2: Sincronizar con el otro repositorio
+      # Paso 2: Configurar PHP y dependencias
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: xdebug
+
+      - name: Install dependencies
+        run: composer install
+
+      # Paso 3: Ejecutar tests con cobertura
+      - name: Run tests with coverage
+        run: vendor/bin/phpunit --coverage-clover build/logs/clover.xml
+
+      # Paso 4: Sincronizar con el otro repositorio
       - name: Sync repositories
         run: |
           git config --global user.name 'JosueUPT'
@@ -30,9 +44,14 @@ jobs:
           git push origin main || echo "No changes to push"
           cd ..
 
-      # Paso 3: Análisis de SonarCloud
+      # Paso 5: Análisis de SonarCloud
       - name: SonarQube Cloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: >
+            -Dsonar.projectKey=CalidadU2
+            -Dsonar.organization=josueupt
+            -Dsonar.php.coverage.reportPaths=build/logs/clover.xml
