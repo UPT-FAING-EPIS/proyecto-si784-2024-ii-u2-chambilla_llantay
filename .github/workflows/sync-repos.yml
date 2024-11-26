@@ -25,11 +25,11 @@ jobs:
           # Clonar el repositorio destino
           git clone https://${{ secrets.PERSONAL_TOKEN }}@github.com/JosueUPT/CalidadU2.git ../CalidadU2
           
-          # Copiar archivos (excluyendo .git)
-          rsync -av --exclude='.git' --exclude='temp_repo' ./ ../CalidadU2/
+          # Copiar archivos (excluyendo .git y .github)
+          rsync -av --exclude='.git' --exclude='.github' --exclude='temp_repo' ./ ../CalidadU2/
           
           # Commit y push en el repositorio destino
           cd ../CalidadU2
           git add .
-          git commit -m "Sync: Update from source repository"
-          git push origin main
+          git commit -m "Sync: Update from source repository" || echo "No changes to commit"
+          git push origin main || echo "No changes to push"
