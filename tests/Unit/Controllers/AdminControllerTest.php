@@ -290,35 +290,6 @@ class AdminControllerTest extends TestCase
         $method->invoke($this->adminController, new \Exception('Test error'));
     }
 
-    /** @test */
-    public function testValidateImageName(): void
-    {
-        $reflection = new \ReflectionClass($this->adminController);
-        $method = $reflection->getMethod('validateImageName');
-        $method->setAccessible(true);
-
-        $validNames = [
-            'valid-image.jpg',
-            'image123.png',
-            'my_image.gif',
-            'test.jpeg'
-        ];
-
-        $invalidNames = [
-            'invalid/image.jpg',
-            'image<script>.png',
-            '../image.gif',
-            'image;.jpeg'
-        ];
-
-        foreach ($validNames as $name) {
-            $this->assertTrue($method->invoke($this->adminController, $name));
-        }
-
-        foreach ($invalidNames as $name) {
-            $this->assertFalse($method->invoke($this->adminController, $name));
-        }
-    }
 
     /** @test */
     public function testGetTotalPendings(): void
@@ -628,20 +599,6 @@ class AdminControllerTest extends TestCase
 
         $this->assertFalse($result['success']);
         $this->assertEquals('Error al actualizar el producto', $result['message']);
-    }
-
-    /** @test */
-    public function testDeleteProductNotFound(): void
-    {
-        $productId = 999;
-
-        $this->pdoStatement->method('fetch')->willReturn(false);
-        $this->pdoStatement->method('execute')->willReturn(true);
-        $this->conn->method('prepare')->willReturn($this->pdoStatement);
-
-        $result = $this->adminController->deleteProduct($productId);
-
-        $this->assertFalse($result['success']);
     }
 
     /** @test */

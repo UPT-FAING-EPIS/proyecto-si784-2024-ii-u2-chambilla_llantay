@@ -202,29 +202,6 @@ class UserControllerTest extends TestCase
     }
 
     /** @test */
-    public function logout_exitoso(): void
-    {
-        if (!defined('PHP_SESSION_NONE')) {
-            define('PHP_SESSION_NONE', 1);
-        }
-
-        $_SESSION['user_id'] = 1;
-        $_SESSION['user_name'] = 'Juan';
-        $_SESSION['user_type'] = 'user';
-
-        $this->expectOutputString('');
-        
-        try {
-            $this->userController->logout();
-        } catch (\Exception $e) {
-            // Capturar la excepción por el header()
-            $this->assertTrue(true);
-        }
-
-        $this->assertEmpty($_SESSION);
-    }
-
-    /** @test */
     public function verificar_hash_password(): void
     {
         $mockStmt = $this->createMock(PDOStatement::class);

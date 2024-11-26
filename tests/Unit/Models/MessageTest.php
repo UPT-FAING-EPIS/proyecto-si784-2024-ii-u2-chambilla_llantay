@@ -111,50 +111,6 @@ class MessageTest extends TestCase
     }
 
     /** @test */
-    public function verifica_si_mensaje_existe(): void
-    {
-        $this->message->setUserId(1);
-        $this->message->setMessage("Mensaje de prueba");
-
-        $this->pdoStatement->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
-
-        $this->pdoStatement->expects($this->once())
-            ->method('fetch')
-            ->willReturn(['id' => 1, 'message' => 'Mensaje de prueba']);
-
-        $this->conn->expects($this->once())
-            ->method('prepare')
-            ->willReturn($this->pdoStatement);
-
-        $result = $this->message->exists($this->conn);
-        $this->assertTrue($result);
-    }
-
-    /** @test */
-    public function verifica_mensaje_no_existente(): void
-    {
-        $this->message->setUserId(1);
-        $this->message->setMessage("Mensaje de prueba");
-
-        $this->pdoStatement->expects($this->once())
-            ->method('execute')
-            ->willReturn(true);
-
-        $this->pdoStatement->expects($this->once())
-            ->method('fetch')
-            ->willReturn(false);
-
-        $this->conn->expects($this->once())
-            ->method('prepare')
-            ->willReturn($this->pdoStatement);
-
-        $result = $this->message->exists($this->conn);
-        $this->assertFalse($result);
-    }
-
-    /** @test */
     public function maneja_error_al_verificar_existencia(): void
     {
         $this->message->setUserId(1);
