@@ -10,8 +10,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Tests\\": "tests/",
-            "Models\\": "src/Models/"
+            "Tests\\": "tests/"
         }
     },
     "require": {
@@ -22,9 +21,5 @@
     },
     "scripts": {
         "test": "phpunit"
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "stable"
+    }
 }
