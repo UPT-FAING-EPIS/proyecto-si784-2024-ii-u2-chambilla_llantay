@@ -53,6 +53,11 @@ jobs:
 
       - name: Run Semgrep Security Scan
         uses: semgrep/semgrep-action@v1
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+          SEMGREP_REPO_URL: "https://github.com/JosueUPT/CalidadU2"
+          SEMGREP_REPO_NAME: "JosueUPT/CalidadU2"
+          SEMGREP_BRANCH: "main"
         with:
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
 
