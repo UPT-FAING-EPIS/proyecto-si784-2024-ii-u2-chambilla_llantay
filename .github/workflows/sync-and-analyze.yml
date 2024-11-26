@@ -19,7 +19,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: "8.2"
           extensions: xdebug
           coverage: xdebug
 
@@ -46,6 +46,18 @@ jobs:
           git commit -m "Sync: Update from source repository" || echo "No changes to commit"
           git push origin main || echo "No changes to push"
           cd ..
+
+      - name: Run Semgrep Security Scan
+        uses: semgrep/semgrep-action@v1
+        with:
+          working-directory: ../CalidadU2
+          config: >-
+            p/security-audit
+            p/owasp-top-ten
+            p/php
+          generateSarif: true
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
