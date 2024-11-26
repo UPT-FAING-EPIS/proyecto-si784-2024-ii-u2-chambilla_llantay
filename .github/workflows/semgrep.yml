@@ -2,7 +2,7 @@ name: Semgrep
 on: [push, pull_request]
 jobs:
   semgrep:
-    name: Scan CalidadU2
+    name: Scan
     runs-on: ubuntu-latest
     steps:
       - name: Checkout CalidadU2
@@ -13,9 +13,5 @@ jobs:
 
       - name: Semgrep Scan
         uses: semgrep/semgrep-action@v1
-        with:
-          publishToken: ${{ secrets.SEMGREP_TOKEN }}
         env:
-          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_TOKEN }}
-          SEMGREP_REPO_URL: "https://github.com/JosueUPT/CalidadU2"
-          SEMGREP_REPO_NAME: "JosueUPT/CalidadU2"
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
