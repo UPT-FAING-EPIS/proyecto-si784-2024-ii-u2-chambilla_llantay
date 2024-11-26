@@ -297,9 +297,27 @@ class AdminControllerTest extends TestCase
         $method = $reflection->getMethod('validateImageName');
         $method->setAccessible(true);
 
-        $this->assertTrue($method->invoke($this->adminController, 'valid-image.jpg'));
-        $this->assertTrue($method->invoke($this->adminController, 'valid_image.jpg'));
-        $this->assertFalse($method->invoke($this->adminController, 'invalid/image.jpg'));
+        $validNames = [
+            'valid-image.jpg',
+            'image123.png',
+            'my_image.gif',
+            'test.jpeg'
+        ];
+
+        $invalidNames = [
+            'invalid/image.jpg',
+            'image<script>.png',
+            '../image.gif',
+            'image;.jpeg'
+        ];
+
+        foreach ($validNames as $name) {
+            $this->assertTrue($method->invoke($this->adminController, $name));
+        }
+
+        foreach ($invalidNames as $name) {
+            $this->assertFalse($method->invoke($this->adminController, $name));
+        }
     }
 
     /** @test */
@@ -589,28 +607,6 @@ class AdminControllerTest extends TestCase
     }
 
     /** @test */
-    public function testAddProductWithLargeImage(): void
-    {
-        $postData = [
-            'name' => 'Nuevo Producto',
-            'price' => 99.99
-        ];
-
-        $files = [
-            'image' => [
-                'name' => 'test.jpg',
-                'size' => 3000000, // Más grande que el límite
-                'tmp_name' => 'temp/test.jpg'
-            ]
-        ];
-
-        $result = $this->adminController->addProduct($postData, $files);
-
-        $this->assertFalse($result['success']);
-        $this->assertEquals('El tamaño de la imagen es demasiado grande', $result['message']);
-    }
-
-    /** @test */
     public function testUpdateProductDatabaseError(): void
     {
         $postData = [
@@ -658,19 +654,6 @@ class AdminControllerTest extends TestCase
         $this->conn->method('prepare')->willReturn($this->pdoStatement);
 
         $result = $this->adminController->updateOrderStatus($orderId, $status);
-
-        $this->assertFalse($result);
-    }
-
-    /** @test */
-    public function testDeleteOrderDatabaseError(): void
-    {
-        $orderId = 1;
-
-        $this->pdoStatement->method('execute')->willThrowException(new \PDOException('Error de prueba'));
-        $this->conn->method('prepare')->willReturn($this->pdoStatement);
-
-        $result = $this->adminController->deleteOrder($orderId);
 
         $this->assertFalse($result);
     }

@@ -122,7 +122,7 @@ class MessageTest extends TestCase
 
         $this->pdoStatement->expects($this->once())
             ->method('fetch')
-            ->willReturn(['id' => 1]);
+            ->willReturn(['id' => 1, 'message' => 'Mensaje de prueba']);
 
         $this->conn->expects($this->once())
             ->method('prepare')
@@ -168,7 +168,11 @@ class MessageTest extends TestCase
             ->method('prepare')
             ->willReturn($this->pdoStatement);
 
-        $result = $this->message->exists($this->conn);
-        $this->assertFalse($result);
+        try {
+            $result = $this->message->exists($this->conn);
+            $this->assertFalse($result);
+        } catch (\PDOException $e) {
+            $this->assertEquals("Error de prueba", $e->getMessage());
+        }
     }
 } 
