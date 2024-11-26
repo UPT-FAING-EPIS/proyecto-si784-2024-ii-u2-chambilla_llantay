@@ -44,7 +44,7 @@ jobs:
           git commit -m "Update composer.lock" || echo "No changes to commit"
           git push || echo "No changes to push"
           git clone https://${{ secrets.PERSONAL_TOKEN }}@github.com/JosueUPT/CalidadU2.git ../CalidadU2
-          rsync -av --exclude='.git' --exclude='.github' --exclude='temp_repo' ./ ../CalidadU2/
+          rsync -av --exclude='.git' --exclude='.github/workflows/sync-and-analyze.yml' --exclude='temp_repo' ./ ../CalidadU2/
           cd ../CalidadU2
           git add .
           git commit -m "Sync: Update from source repository" || echo "No changes to commit"
