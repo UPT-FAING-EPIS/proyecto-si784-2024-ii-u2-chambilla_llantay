@@ -31,7 +31,7 @@ jobs:
           cd ..
 
       # Paso 3: Análisis de SonarCloud
-      - name: SonarCloud Scan
+      - name: SonarQube Cloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
