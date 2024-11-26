@@ -16,16 +16,20 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.PERSONAL_TOKEN }}
 
-      - name: Configure Git
+      - name: Sync repositories
         run: |
+          # Configurar git
           git config --global user.name 'JosueUPT'
           git config --global user.email '${{ secrets.GIT_EMAIL }}'
-
-      - name: Clone destination repository
-        run: |
-          git clone https://${{ secrets.PERSONAL_TOKEN }}@github.com/JosueUPT/CalidadU2.git temp_repo
-          cp -r . temp_repo/ 2>/dev/null || :
-          cd temp_repo
+          
+          # Clonar el repositorio destino
+          git clone https://${{ secrets.PERSONAL_TOKEN }}@github.com/JosueUPT/CalidadU2.git ../CalidadU2
+          
+          # Copiar archivos (excluyendo .git)
+          rsync -av --exclude='.git' --exclude='temp_repo' ./ ../CalidadU2/
+          
+          # Commit y push en el repositorio destino
+          cd ../CalidadU2
           git add .
           git commit -m "Sync: Update from source repository"
           git push origin main
