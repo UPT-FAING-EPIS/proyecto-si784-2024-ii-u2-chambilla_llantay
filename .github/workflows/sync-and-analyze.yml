@@ -51,9 +51,6 @@ jobs:
         uses: semgrep/semgrep-action@v1
         with:
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
-        env:
-          SEMGREP_REPO_URL: https://github.com/JosueUPT/CalidadU2
-          SEMGREP_REPO_NAME: CalidadU2
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
