@@ -53,10 +53,11 @@ jobs:
 
       - name: Run Semgrep Security Scan
         uses: semgrep/semgrep-action@v1
+        env:
+          SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         with:
-          config: auto  # Usa las reglas predeterminadas como en local
-          output: semgrep-results.json  # Guarda los resultados localmente
-          metrics: "off"  # No intenta conectarse a Semgrep.dev
+          config: auto
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
