@@ -50,8 +50,3 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.projectKey=CalidadU2
-            -Dsonar.organization=josueupt
-            -Dsonar.php.coverage.reportPaths=build/logs/clover.xml
