@@ -11,7 +11,14 @@ jobs:
           repository: JosueUPT/CalidadU2
           path: CalidadU2
 
+      - name: Setup Git
+        run: |
+          cd CalidadU2
+          git config --global --add safe.directory $(pwd)
+
       - name: Semgrep Scan
         uses: semgrep/semgrep-action@v1
+        with:
+          working-directory: ./CalidadU2
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
