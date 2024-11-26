@@ -1,0 +1,27 @@
+name: Sync Repositories
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:  # Permite ejecutar manualmente
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Push to destination repository
+        run: |
+          git config --global user.name 'JosueUPT'
+          git config --global user.email 'jaechambilla@upt.pe'
+          
+          # Agregar el repositorio destino como remoto
+          git remote add destination https://${{ secrets.PERSONAL_TOKEN }}@github.com/JosueUPT/CalidadU2.git
+          
+          # Forzar el push al repositorio destino
+          git push destination main:main --force 
