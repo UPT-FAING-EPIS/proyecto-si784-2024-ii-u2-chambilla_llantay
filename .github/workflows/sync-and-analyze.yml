@@ -56,7 +56,6 @@ jobs:
         env:
           SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
         with:
-          config: auto
           publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
 
       - name: SonarCloud Scan
